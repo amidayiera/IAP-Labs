@@ -1,6 +1,6 @@
 <?php
-    include "interface/Crud.php";
-    include "interface/Authenticator.php";
+    include "interfaces/Crud.php";
+    include "interfaces/Authenticator.php";
     include_once "Connection.php";
 
     class User implements Crud, Authenticator{
