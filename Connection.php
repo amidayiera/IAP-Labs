@@ -8,7 +8,7 @@
         public $connection;
 
         function __construct(){
-            $this->connection = mysqli_connect(DB_SERVER, DB_USER, DB_PASSWORD) or die("Error:" .mysqli_error());
+            $this->connection = mysqli_connect(DB_SERVER, DB_USER, DB_PASSWORD) or die("Error:" .mysqli_error($this));
             mysqli_select_db($this->connection, DB_NAME);
         }
 
