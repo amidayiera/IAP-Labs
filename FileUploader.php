@@ -38,7 +38,7 @@ class FileUploader{
 
     // METHODS
     public function uploadFile() {
-        
+
     }
     public function fileAlreadyExists() {}
     public function saveFilePathTo() {}
