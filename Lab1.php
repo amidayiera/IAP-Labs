@@ -11,23 +11,35 @@
         $city = $_POST['city_name'];
 
         $user = new User($first_name,$last_name,$city, $username, $password);
-        $result = $user->save($connection->connection);
-        $users = $user->readAll($connection->connection)->fetch_assoc();
 
         if (!$user->validateForm()) {
             $user->createFormErrorSessions();
             header("Refresh:0");
             die();
+            // if(!$user->isUserExist()) {
+            //     die();
+            // }
         }
-        if($result)
+       
+        $result = $user->save($connection->connection);
+        // $users = $user->readAll($connection->connection)->fetch_assoc();
+
+
+        // lab 2 : create object for file uploading
+        $uploader = new FileUploader();
+        // lab 2 :call uploadFile() which returns
+        $file_upload_response = $uploader->uploadFile();
+
+        // lab 2 : check if the operation save occurred successfully
+        if($result && $file_upload_response)
         {
-            header("Location:AllRecords.php?success=1");
-            // echo 'Save operation successful!!';
+            // header("Location:AllRecords.php?success=1");
+            echo 'Save operation successful!!';
             $connection->closeConnection();
         }
         else
         {
-            echo 'An Error occurred.';
+            echo 'An Error occurred. Try again';
         }
 
         // print_r($users);
@@ -46,8 +58,8 @@
     </head>
     <body>
         <form method="post" name="user_details" id="user_details" onsubmit="return validateForm()" action="<?=$_SERVER['PHP_SELF']?>">
+          <!-- enctype="multipart/form-data" -->
             <div class="container">
-                <!-- lab 2 -->
                 <div id="form_errors">
                     <?php
                         session_start();
@@ -57,7 +69,6 @@
                         }
                     ?>
                 </div>
-                <!-- end of lab 2 -->
                 <label for="fname"><b>First Name</b></label>
                 <input type="text" placeholder="Enter First Name" name="first_name" id="fname" required>
             
@@ -73,6 +84,9 @@
                 <label for="password"><b>Password</b></label>
                 <input type="password" placeholder="Enter Password" name="password" id ="pass" required>
             
+                <label for="fileToUpload">Profile Image</label>
+                <input type="file" name="fileToUpload" id="fileToUpload">
+
                 <button type="submit" name="btn_save">Save</button>
             </div>
             <a href="Login.php" >Login</a>
