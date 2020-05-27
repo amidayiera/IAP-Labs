@@ -69,3 +69,9 @@ form {
       width: 100%;
     }
   }
+
+.loginButton {
+    color:white;
+    text-transform: none;
+
+  }
