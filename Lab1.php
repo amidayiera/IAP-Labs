@@ -9,6 +9,8 @@
         $first_name =$_POST['first_name'];
         $last_name = $_POST['last_name'];
         $city = $_POST['city_name'];
+        $username = $_POST['username'];
+        $password = $_POST['password'];
 
         $user = new User($first_name,$last_name,$city, $username, $password);
         $result = $user->save($connection->connection);
@@ -21,7 +23,7 @@
         }
         if($result)
         {
-            header("Location:AllRecords.php?success=1");
+            // header("Location:AllRecords.php?success=1");
             // echo 'Save operation successful!!';
             $connection->closeConnection();
         }
@@ -75,7 +77,7 @@
             
                 <button type="submit" name="btn_save">Save</button>
             </div>
-            <a href="Login.php" >Login</a>
+            <button type="submit"><a class="loginButton" href="Login.php" >Login</a></button>
         </form>
     </body>
 </html>
