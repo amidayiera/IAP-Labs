@@ -60,6 +60,7 @@
         <form method="post" name="user_details" id="user_details" onsubmit="return validateForm()" action="<?=$_SERVER['PHP_SELF']?>">
           <!-- enctype="multipart/form-data" -->
             <div class="container">
+                <!-- lab 2 -->
                 <div id="form_errors">
                     <?php
                         session_start();
