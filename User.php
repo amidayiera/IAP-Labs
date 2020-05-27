@@ -150,17 +150,31 @@
 
         public function isUserExist() {
             // ensure users dont have the same username
+            $connection = new DBconnector();
+            $username = $this->getUsername();
+            $exists = false;
+            $query = "SELECT * FROM user WHERE username = '$username'";
+            $result = mysqli_query($connection, $query);
+            if (mysqli_num_rows($result) > 0 ) {
+                $exists = true;
+            } 
+            $connection->closeConnection;
+            return $exists;
+
+
         }
     }
 
 ?>
 <!-- 
-Explain what is happening in line 3. Remember that we are using the functionality we put in method logout () in class User. 
 Finally, we need to alter our database table, accommodate our new application. 
 Execute this query against your table user
   ALTER TABLE user ADD(usernmae varcahr(20),password text);
-Now test your application. Check if you can register a user, login and logout. Also check if you can view the private_page.php without the user logged in.
+Now test your application. Check if you can register a user, login and logout. 
+Also check if you can view the private_page.php without the user logged in.
 Also view your records in the database, notice how your passwords look like. 
 Your task 
 You know that 2 users cannot have the same username. 
-Create a method in the class User called isUserExist() and write the logic that would prevent the user from using a username that is already in use. You should be able to report if such an attempt occurs.  -->
+Create a method in the class User called isUserExist() and write the logic 
+that would prevent the user from using a username that is already in use. 
+You should be able to report if such an attempt occurs.  -->
