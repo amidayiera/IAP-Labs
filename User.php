@@ -70,7 +70,7 @@
             $this->hashPassword();
             $pass = $this->password;
 
-            $result = mysqli_query($connection, "INSERT INTO user(first_name, last_name, user_city, username, pass) VALUES('$fname','$lname','$city','$uname','$pass')") or die ("Error: " . mysqli_error($connection));
+            $result = mysqli_query($connection, "INSERT INTO user(first_name, last_name, user_city, username, password) VALUES('$fname','$lname','$city','$uname','$pass')") or die ("Error: " . mysqli_error($connection));
             return $result;
         }
 
@@ -108,7 +108,7 @@
         public function createFormErrorSessions()
         {
             session_start();
-            $_SESSION['form_errors'] = "All fileds are required";
+            $_SESSION['form_errors'] = "All fields are required";
         }
 
         public function hashPassword() {
@@ -118,12 +118,13 @@
         public function isPasswordCorrect() {
             $connection = new DBConnector();
             $found = false;
-            $result = mysqli_query($connection, "SELECT * FROM user") or die("Error" . mysqli_error($connection));
+            $result = mysqli_query($connection->connection, "SELECT * FROM user") or die("Error: ".mysql_error($connection->connection));
 
             while($row = mysqli_fetch_array($result)) {
                 if(password_verify($this->getPassword(),$row['password']) && $this->getUsername() == $row['username']) {
                     $found = true;
                 }
+        
             }
             // close the database connection
             $connection->closeConnection();
@@ -134,7 +135,7 @@
         {
             if($this->isPasswordCorrect()) {
                 // password is correct, lead to protected page
-                header("Location: PrivagtePage.php");
+                header("Location: PrivatePage.php");
             }
         }
         public function createUserSession() {
