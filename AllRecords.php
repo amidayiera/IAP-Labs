@@ -1,6 +1,6 @@
 <?php
     include 'User.php';
-    include 'Connection.php';
+    include_once 'Connection.php';
 
     $connection = new DBconnector();
     $result = User::readAll($connection->connection);
