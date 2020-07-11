@@ -13,11 +13,18 @@
         $username = $_POST['username'];
         $password = $_POST['password'];
 
-          //Image
+        $utc_timestamp = $_POST['utc_timestamp'];
+        $offset = $_POST['time_zone_offset'];
+
+        //Image
         $file_name = $_FILES['fileToUpload']['name'];
         $file_size = $_FILES['fileToUpload']['size'];
         $final_file_name = $_FILES['fileToUpload']['tmp_name'];
         $file_type = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+
+        //Timezone
+        $user->setUtcTimestamp($utc_timestamp);
+        $user->setTimezoneOffset($offset);
 
 
         $user = new User($first_name,$last_name,$city, $username, $password);
@@ -111,8 +118,11 @@
               content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="stylesheet" href="css/Lab1.css">
-        <script src="js/validate.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="css/validate.css">
+        <script src= "https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script> 
+       
+       <script type="text/javascript" src="js/Timezone.js"></script>
+        <script src="js/Validate.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="css/Validate.css">
     </head>
     <body>
         <form method="post" name="user_details" id="user_details" onsubmit="return validateForm()" action="<?=$_SERVER['PHP_SELF']?>">
@@ -151,8 +161,17 @@
                 <label for="fileToUpload">Profile Image</label>
                 <input type="file" name="fileToUpload" id="fileToUpload">
 
+
                 <!-- <button type="submit" name="btn_save">Save</button> -->
                 <button type="submit"><a class="loginButton" href="Login.php" >Login</a></button>
+
+                <tr>
+                 <td> <input type="hidden" name="utc_timestamp" id="utc_timestamp" value=""> </td> 
+             </tr>
+
+             <tr>
+                     <td> <input type="hidden" name="time_zone_offset" id="time_zone_offset" value=""> </td>
+             </tr>
             </div>
         </form>
     </body>

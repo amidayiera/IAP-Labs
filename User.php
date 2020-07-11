@@ -13,6 +13,10 @@
         private $username;
         private $password;
 
+        // lab3
+        private $timezone_offset;
+        private $utc_timestamp;
+
         
         /*
         class constructor to initialize our values
@@ -60,6 +64,30 @@
         public function getUserId() {
             return $this->user_id;
         }
+            //time_zone_offset (Set and Get)
+
+        public function getTimezoneOffset()
+        {
+            return $this->timezone_offset;
+        }
+
+        public function setTimezoneOffset($timezoneOffset)
+        {
+            $this->timezone_offset = $timezoneOffset;
+        }
+
+
+        //Utc_timestamp (Set and Get)
+        public function getUtcTimestamp()
+        {
+            return $this->utc_timestamp;
+        }
+
+        public function setUtcTimestamp($utc_timestamp)
+        {
+            $this->utc_timestamp = $utc_timestamp;
+        }
+
 
         public function save($connection){
             $fname = $this->first_name;
@@ -69,8 +97,12 @@
             $uname = $this->username;
             $this->hashPassword();
             $pass = $this->password;
+            // lab3
+            $timezoneOffset = $this->getTimezoneOffset();
+            $utc_timestamp = $this->getUtcTimestamp();
+       
 
-            $result = mysqli_query($connection, "INSERT INTO user(first_name, last_name, user_city, username, password) VALUES('$fname','$lname','$city','$uname','$pass')") or die ("Error: " . mysqli_error($connection));
+            $result = mysqli_query($connection, "INSERT INTO user(first_name, last_name, user_city, username, password, created_on, offset) VALUES('$fname','$lname','$city','$uname','$pass', '$utc_timestamp', '$timezoneOffset')") or die ("Error: " . mysqli_error($connection));
             return $result;
         }
 
@@ -100,7 +132,9 @@
             $fname = $this->first_name;
             $lname = $this->last_name;
             $city = $this->city_name;
-            if($fname == "" || $lname == "" || $city == "") {
+            $username = $this->username;
+            $password= $this->password;
+            if($fname == "" || $lname == "" || $city == "" || $password =="" || $username=="" ||$this->isUserExist()) {
                 return false;
             }
             return true;
@@ -167,15 +201,4 @@
     }
 
 ?>
-<!-- 
-Finally, we need to alter our database table, accommodate our new application. 
-Execute this query against your table user
-  ALTER TABLE user ADD(usernmae varcahr(20),password text);
-Now test your application. Check if you can register a user, login and logout. 
-Also check if you can view the private_page.php without the user logged in.
-Also view your records in the database, notice how your passwords look like. 
-Your task 
-You know that 2 users cannot have the same username. 
-Create a method in the class User called isUserExist() and write the logic 
-that would prevent the user from using a username that is already in use. 
-You should be able to report if such an attempt occurs.  -->
+
