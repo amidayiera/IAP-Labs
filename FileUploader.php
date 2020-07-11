@@ -44,7 +44,7 @@ class FileUploader{
 
     // METHODS
     public function uploadFile() {
-        $con = new DBConnector();
+        $connection = new DBConnector();
         $this->moveFile();
   
         $img_name = $this->getOriginalName();
@@ -53,8 +53,8 @@ class FileUploader{
         //Send a post to the database if the file has been moved
         if($this->uploadOk){
   
-          $result_set = mysqli_query($con->con, 
-          "UPDATE users SET img_name='$img_name' WHERE username='$username'") or die("Error".mysqli_error($con));
+          $result_set = mysqli_query($connection->connection, 
+          "UPDATE users SET img_name='$img_name' WHERE username='$username'") or die("Error".mysqli_error($connection));
   
           /* 
              We unset the short session instantiation since
@@ -99,27 +99,27 @@ class FileUploader{
     public function fileTypeIsCorrect() {
         $extensions = array("jpeg","jpg","png", "jpeg");
 
-        $of_type_extensions = false;
+        $type_extensions = false;
   
         $type = $this->file_type;
   
         if(in_array($type, $extensions)){
-          $of_type_extensions = true;
+          $type_extensions = true;
         }
   
-        return $of_type_extensions;
+        return $type_extensions;
     }
     public function fileSizeIsCorrect() {
-        $size_OK = false;
+        $sizeOK = false;
         $limit = self::$size_limit;
   
         if($this->file_size < 5000000000){
-          $size_OK = true;
+          $sizeOK = true;
   
-          return $size_OK;
+          return $sizeOK;
         }
   
-        return $size_OK;
+        return $sizeOK;
     }
     public function fileWasSelected() {
         $selected = false;
