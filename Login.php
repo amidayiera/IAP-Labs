@@ -11,22 +11,34 @@
         $instance->setPassword($password);
         $instance->setUsername($username);
 
-        if($instance->isPasswordCorrect()) {
-            $instance->login();
-            // close database connection
-            $connection->closeConnection();
-            // create a user session
-            $instance->createUserSession();
-            header("Location:PrivatePage.php");
-
-        // if(User::isPasswordCorrect($username, $password)) {
-        //     User::createUserSession($username);
+        // if($instance->isPasswordCorrect()) {
+        //     $instance->login();
+        //     // close database connection
+        //     $connection->closeConnection();
+        //     // create a user session
+        //     $instance->createUserSession();
         //     header("Location:PrivatePage.php");
-        // } else {
-            $connection->closeConnection();
-            header("Location:Login.php");
-        }
 
+        // // if(User::isPasswordCorrect($username, $password)) {
+        // //     User::createUserSession($username);
+        // //     header("Location:PrivatePage.php");
+        // // } else {
+        //     $connection->closeConnection();
+        //     header("Location:Login.php");
+        // }
+
+        if($instance->isPasswordCorrect()){
+            $instance->login();
+
+            $con->closeDatabase();
+
+            $instance->createUserSession();
+        }else{
+        $con->closeDatabase();
+        header("Location:Login.php");
+            // header("Location:PrivatePage.php");
+
+        }
     }
 ?>
 

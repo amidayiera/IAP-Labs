@@ -1,6 +1,7 @@
 <?php
     include_once 'Connection.php';
     include_once 'User.php';
+    include_once 'FileUploader.php';
 
     $connection = new DBconnector();
 
@@ -12,37 +13,92 @@
         $username = $_POST['username'];
         $password = $_POST['password'];
 
+          //Image
+        $file_name = $_FILES['fileToUpload']['name'];
+        $file_size = $_FILES['fileToUpload']['size'];
+        $final_file_name = $_FILES['fileToUpload']['tmp_name'];
+        $file_type = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+
+
         $user = new User($first_name,$last_name,$city, $username, $password);
 
-        if (!$user->validateForm()) {
-            $user->createFormErrorSessions();
-            header("Refresh:0");
-            die();
-            // if(!$user->isUserExist()) {
-            //     die();
-            // }
-        }
+        // if (!$user->validateForm()) {
+        //     $user->createFormErrorSessions();
+        //     header("Refresh:0");
+        //     die();
+        //     // if(!$user->isUserExist()) {
+        //     //     die();
+        //     // }
+        // }
        
-        $result = $user->save($connection->connection);
-        // $users = $user->readAll($connection->connection)->fetch_assoc();
+        // $result = $user->save($connection->connection);
+        // // $users = $user->readAll($connection->connection)->fetch_assoc();
 
 
-        // lab 2 : create object for file uploading
-        $uploader = new FileUploader();
-        // lab 2 :call uploadFile() which returns
-        $file_upload_response = $uploader->uploadFile();
+        // // lab 2 : create object for file uploading
+        // $uploader = new FileUploader();
+        // // lab 2 :call uploadFile() which returns
+        // $file_upload_response = $uploader->uploadFile();
 
-        // lab 2 : check if the operation save occurred successfully
-        if($result && $file_upload_response)
-        {
-            // header("Location:AllRecords.php?success=1");
-            // echo 'Save operation successful!!';
-            $connection->closeConnection();
-        }
-        else
-        {
-            echo 'An Error occurred. Try again';
-        }
+        // // lab 2 : check if the operation save occurred successfully
+        // if($result && $file_upload_response)
+        // {
+        //     // header("Location:AllRecords.php?success=1");
+        //     // echo 'Save operation successful!!';
+        //     $connection->closeConnection();
+        // }
+        // else
+        // {
+        //     echo 'An Error occurred. Try again';
+        // }
+              //FileUpload Instance
+      $fileUpload = new FileUploader();
+
+      //Setting the username
+      $fileUpload->setUsername($uname);
+
+      //Using setter methods
+      $fileUpload->setOriginalName($file_name);
+      $fileUpload->setFileType($file_type);
+      $fileUpload->setFinalFileName($final_file_name);
+      $fileUpload->setFileSize($file_size);
+
+      //Check for valid criteria without Javascript
+      if(!$user->validateForm())
+      {
+         $user->createFormErrorSessions();
+         header("Location:Lab1.php");
+         die();
+      }else{
+		if ($fileUpload->fileWasSelected()) {
+			// echo "SELECTED"."<br>";
+			if ($fileUpload->fileTypeisCorrect()) {
+				// echo "CORRECT TYPE"."<br>";
+				if ($fileUpload->fileSizeIsCorrect()) {
+					// echo "CORRECT SIZE"."<br>";
+
+					if (!($fileUpload->fileAlreadyExists())) {
+						// echo "FILE DOESNT EXIST"."<br>";
+				    $user->save($con);
+					 $fileUpload->uploadFile() ;
+
+					}else{
+						echo "FILE EXISTS"."<br>";
+
+					}
+
+				}else{
+					echo "PICK A SMALLER SIZE"."<br>";
+				}
+
+			}else{
+				echo "INCORRECT TYPE"."<br>";
+			}
+
+
+		}else{echo "NO FILE DETECTED"."<br>";}
+	}
+   $con->closeDatabase();
 
         // print_r($users);
     }
@@ -66,9 +122,14 @@
                 <div id="form_errors">
                     <?php
                         session_start();
-                        if (!empty($_SESSION['form_errors'])) {
-                            echo " " . $_SESSION['form_errors'];
-                            unset($_SESSION['form_errors']);
+                        if(!empty($_SESSION['form_errors'])){
+                        echo " ". $_SESSION['form_errors'] ."<br>";
+                        unset($_SESSION['form_errors']);
+                        }
+
+                        if(!empty($_SESSION['exists'])){
+                        echo " ". $_SESSION['exists'];
+                        unset($_SESSION['exists']);
                         }
                     ?>
                 </div>
@@ -90,9 +151,9 @@
                 <label for="fileToUpload">Profile Image</label>
                 <input type="file" name="fileToUpload" id="fileToUpload">
 
-                <button type="submit" name="btn_save">Save</button>
+                <!-- <button type="submit" name="btn_save">Save</button> -->
+                <button type="submit"><a class="loginButton" href="Login.php" >Login</a></button>
             </div>
-            <button type="submit"><a class="loginButton" href="Login.php" >Login</a></button>
         </form>
     </body>
 </html>

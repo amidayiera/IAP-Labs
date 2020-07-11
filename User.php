@@ -118,7 +118,7 @@
         public function isPasswordCorrect() {
             $connection = new DBConnector();
             $found = false;
-            $result = mysqli_query($connection->connection, "SELECT * FROM user") or die("Error: ".mysql_error($connection->connection));
+            $result = mysqli_query($connection->connection, "SELECT * FROM user") or die("Error: ".mysqli_error($connection->connection));
 
             while($row = mysqli_fetch_array($result)) {
                 if(password_verify($this->getPassword(),$row['password']) && $this->getUsername() == $row['username']) {
@@ -161,7 +161,7 @@
             } 
             $connection->closeConnection;
             return $exists;
-
+        
 
         }
     }
