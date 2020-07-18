@@ -69,6 +69,7 @@
             return $this->user_id;
         }
 
+
         public function getTimezoneOffset()
         {
             return $this->timezoneOffset;
