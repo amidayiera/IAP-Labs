@@ -30,11 +30,11 @@
         if($instance->isPasswordCorrect()){
             $instance->login();
 
-            $con->closeDatabase();
+            $connection->closeConnection();
 
             $instance->createUserSession();
         }else{
-        $con->closeDatabase();
+        $connection->closeConnection();
         header("Location:Login.php");
             // header("Location:PrivatePage.php");
 
