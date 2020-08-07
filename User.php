@@ -88,7 +88,7 @@
             $this->utc_timestamp = $utc_timestamp;
         }
 
-
+        
         public function save($connection){
             $fname = $this->first_name;
             $lname = $this->last_name;
@@ -102,7 +102,9 @@
             $utc_timestamp = $this->getUtcTimestamp();
        
 
-            $result = mysqli_query($connection, "INSERT INTO user(first_name, last_name, user_city, username, password, created_on, offset) VALUES('$fname','$lname','$city','$uname','$pass', '$utc_timestamp', '$timezoneOffset')") or die ("Error: " . mysqli_error($connection));
+            $result = mysqli_query($connection, "INSERT INTO user(first_name, last_name, user_city, username, password, created_on, offset)
+                                                    VALUES('$fname','$lname','$city','$uname','$pass', '$utc_timestamp', '$timezoneOffset')") 
+                                                    or die ("Error: " . mysqli_error($connection));
             return $result;
         }
 
